@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Stadtspaziergang Wien</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	
+	<link rel="stylesheet" href="leaflet-routing-machine.css" />
+	<script src="leaflet-routing-machine.js"></script>
+	
+	
+	    <style>
+		#wienMap {
+            height: 100vh;
+            width: 100vw;
+            border: 1px solid black;
+            margin: auto;
+        }
+		</style>
+</head>
+<body>
+	<div id="wienMap"></div>
+<script>
+
+
+		
+		    var layers = {
+            
+
+            geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapgrau: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapoverlay: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaphidpi: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaporthofoto30cm: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+        };
+		
+        var map = L.map('wienMap', {
+            layers: [layers.bmapgrau],
+            center: [47.669,13.854],
+            zoom: 8
+        });
+        
+		L.control.scale({
+            maxWidth: 200,
+            metric: true,
+            imperial: false
+        }).addTo(map);
+
+		L.Routing.control({
+		waypoints: [
+			L.latLng(48.208490, 16.372988),
+			L.latLng(47.268611, 11.393139)
+		]
+		}).addTo(map);  
+
+</script>
+</body>
+</html>
