@@ -8,114 +8,173 @@
     <title>basemap.at mit leaflet-hash Plugin</title>
 
     <link rel="stylesheet" href="js/leaflet/leaflet.css" />
-	<link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
-	
+    <link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
     <script src="js/leaflet/leaflet.js"></script>
     <script src="js/leaflet-hash/leaflet-hash.js"></script>
-	<script src="data/AdlerwegEtappe19.js"> </script>
-	
-	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"> </script>
+    <script src="data/AdlerwegEtappe19.js"></script>
+    <script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
 
-	
-	
+
     <style>
         body {
             padding: 0px;
             margin: 0px;
         }
-        html, body, #map {
-            height: 100vh;
-            width: 100vw;
+
+        #map {
+            height: 600px;
+            width: 1024px;
+        }
+
+        #text {
+            width: 1024px;
+        }
+
+        p {
+            margin-top: 1.1em;
         }
     </style>
 </head>
+<div id="text">
 
-<body>
-    <div id="map"></div>
+    <body>
+        <h3>Adlerweg Etappe 19: Anhalter Hütte bis Hanauer Hütte</h3>
+        <p>Eine intakte Berglandschaft, Wasserfälle und plätschernde Bäche sind die Begleiter auf dieser Adlerweg-Etappe. Interessante Einblicke und Ausblicke bieten sich vom Angerletal, der Weiler Pfafflar überrascht mit seinen „gestreift“ wirkenden Holzhäusern.<br>
+            <a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-19-anhalter-huette-hanauer-huette">Etappenseite</a><br>
+            <a href="https://github.com/csat9369.github.io">Matthias von Stackelberg Github-Seite</a>
+        </p>
+</div>
+<div id="map"></div>
 
-    <script>
-        // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
-        var layers = {
-            geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
-            }),
-            bmapgrau: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
-            }),
-            bmapoverlay: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.png", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
-            }),
-            bmaphidpi: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.jpeg", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
-            }),
-            bmaporthofoto30cm: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
-            }),
-            osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                subdomains: ['a', 'b', 'c'],
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            })
-        };
+<script>
+    // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
+    var layers = {
+        geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
+            subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+            attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+        }),
+        bmapgrau: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png", {
+            subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+            attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+        }),
+        bmapoverlay: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.png", {
+            subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+            attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+        }),
+        bmaphidpi: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.jpeg", {
+            subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+            attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+        }),
+        bmaporthofoto30cm: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg", {
+            subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+            attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+        }),
+        osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            subdomains: ['a', 'b', 'c'],
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        })
+    };
+    // Karte definieren
+    var map = L.map('map', {
+        layers: [layers.geolandbasemap],
+        center: [47.654, 13.370],
+        zoom: 8
+    });
+    // Maßstab hinzufügen
+    L.control.scale({
+        maxWidth: 200,
+        metric: true,
+        imperial: false
+    }).addTo(map);
+    // WMTS-Layer Auswahl hinzufügen
+    var layerControl = L.control.layers({
+        "basemap.at - STANDARD": layers.geolandbasemap,
+        "basemap.at - GRAU": layers.bmapgrau,
+        "basemap.at - OVERLAY": layers.bmapoverlay,
+        "basemap.at - HIGH-DPI": layers.bmaphidpi,
+        "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
+        "OpenStreetMap": layers.osm,
+    }).addTo(map);
+    // leaflet-hash aktivieren
+    var hash = new L.Hash(map);
+    var adlerweg19 = omnivore.gpx('data/AdlerwegEtappe19.gpx').addTo(map);
 
-        // Karte definieren
-        var map = L.map('map', {
-            layers: [layers.geolandbasemap],
-            center : [47.654, 13.370],
-            zoom : 8
+    // Höhenprofil 
+    var profileControl = L.control.elevation({
+        position: 'bottomleft',
+        theme: 'steelblue-theme'
+    });
+    profileControl.addTo(map);
+
+
+    // GPX Track laden
+    gpxTrack = omnivore.gpx('data/AdlerwegEtappe19.gpx').addTo(map);
+
+    // nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
+    gpxTrack.on('ready', function() {
+        // Popup hinzufügen
+        var markup = '<h3>Adlerweg-Etappe 19: Anhalter Hütte - Hanauer Hütte</h3>';
+        markup += '<p>Eine intakte Berglandschaft, Wasserfälle und plätschernde Bäche sind die Begleiter auf dieser Adlerweg-Etappe. Interessante Einblicke und Ausblicke bieten sich vom Angerletal, der Weiler Pfafflar überrascht mit seinen „gestreift“ wirkenden Holzhäusern.</p>'
+        markup += '<li>Ausgangspunkt: Anhalter Hütte</li>';
+        markup += '<li>Endpunkt: Hanauer Hütte</li>';
+        markup += '<li>Höhenmeter bergauf: 750</li>';
+        markup += '<li>Höhenmeter bergab: 870</li>';
+        markup += '<li>Höchster Punkt: 2188</li>';
+        markup += '<li>Schwierigkeitsgrad: mittelschwierig</li>';
+        markup += '<li>Streckenlänge (in km): 12,5</li>';
+        markup += '<li>Gehzeit (in Stunden): 3,75</li>';
+        markup += '<li>Einkehrmöglichkeiten: Anhalter Hütte,Haunauer Hütte</li>';
+        markup += '<li><a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-19-anhalter-huette-hanauer-huette">Direkt zur Webseite</a></li>';
+        gpxTrack.bindPopup(markup, {
+            maxWidth: 500
         });
 
-        // Maßstab hinzufügen
-        L.control.scale({
-            maxWidth: 200,
-            metric: true,
-            imperial: false
-        }).addTo(map);
+        // Ausschnitt 
+        map.fitBounds(gpxTrack.getBounds());
 
-		
-        // WMTS-Layer Auswahl hinzufügen
-        var layerControl = L.control.layers({
-            "basemap.at - STANDARD": layers.geolandbasemap,
-            "basemap.at - GRAU": layers.bmapgrau,
-            "basemap.at - OVERLAY": layers.bmapoverlay,
-            "basemap.at - HIGH-DPI": layers.bmaphidpi,
-            "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
-            "OpenStreetMap": layers.osm,
-        }).addTo(map);
+        // Höhenprofil 
+        gpxTrack.eachLayer(function(layer) {
+            profileControl.addData(layer.feature);
+        });
+    });
 
-        // leaflet-hash aktivieren
-        var hash = new L.Hash(map);
-		
-		L.geoJSON(window.etappe19).addTo(map);
-		
-		
-		// Koordinaten anhalter hütte 47.3013, 10.66794
-		// Hanauer Hütte 47.249814, 10.590996
-		var huts =  [
-			L.marker([47.3013, 10.66794], { title: "Anhalter Hütte" , icon:L.icon({iconUrl: "icons/cabin.png"})}), 
-			L.marker([47.249814, 10.590996], { title: "Hanauer Hütte",icon:L.icon({iconUrl: "icons/cabin.png"})}),
-			
-		];
-		var hutsLayer = L.featureGroup();
-		for(var i=0; i<huts.length; i++) {
-			hutsLayer.addLayer(huts[i]);
-		
-		};
-		//hutsLayer.addTo(map);
-		map.on("zoomend", function () {
-			if (map.getZoom() >= 15) {
-				map.addLayer(hutsLayer);
-			}else{
-				map.removeLayer(hutsLayer);
-			}
-		});
-		
-    </script>
+    
+    var restaurant1 = L.marker([47.249890, 10.590991], {
+        title: 'Hanauer Hütte',
+        icon: L.icon({
+            iconUrl: 'icons/cabin.png',
+        })
+    }).addTo(map);
+
+    var restaurant2 = L.marker([47.301389, 10.667774], {
+        title: 'Anhalter Hütte',
+        icon: L.icon({
+            iconUrl: 'icons/cabin.png',
+        })
+    }).addTo(map);
+
+var pointA = new L.LatLng(47.249890, 10.590991);
+var pointB = new L.LatLng(47.301389, 10.667774);
+var pointList = [pointA, pointB];
+
+var firstpolyline = new L.Polyline(pointList, {
+    color: 'red',
+    weight: 3,
+    opacity: 6,
+    smoothFactor: 1
+});
+firstpolyline.addTo(map);
+	
+	
+	
+	
+	
+	
+   
+</script>
 
 </body>
 
-</html>
+</html> 
