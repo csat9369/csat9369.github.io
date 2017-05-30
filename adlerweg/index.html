@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <title>basemap.at mit leaflet-hash Plugin</title>
+    <title>Adlerweg Etappe 19</title>
 
     <link rel="stylesheet" href="js/leaflet/leaflet.css" />
     <link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
@@ -21,15 +20,31 @@
         body {
             padding: 0px;
             margin: 0px;
+			background-color: #ffebb5;
         }
 
+		#text {
+		width : 1024px;
+		align-self: center;
+        margin-left: 100px;
+        margin-right: 100px;  		
+		
+		}
+		
         #map {
-            height: 600px;
-            width: 1024px;
+		width : 1024px;
+        height : 600px;
+        align-self: center;
+        outline-color: black;
+        outline-width: 2px;
+        margin-left: 100px;
+        margin-right: 100px;   
         }
 
-        #text {
-            width: 1024px;
+    cabin {
+            margin-left: -50px;
+            margin-top: -50px;
+            
         }
 
         p {
@@ -40,10 +55,10 @@
 <div id="text">
 
     <body>
-        <h3>Adlerweg Etappe 19: Anhalter Hütte bis Hanauer Hütte</h3>
+        <h1>Adlerweg Etappe 19: Anhalter Hütte bis Hanauer Hütte</h1>
         <p>Eine intakte Berglandschaft, Wasserfälle und plätschernde Bäche sind die Begleiter auf dieser Adlerweg-Etappe. Interessante Einblicke und Ausblicke bieten sich vom Angerletal, der Weiler Pfafflar überrascht mit seinen „gestreift“ wirkenden Holzhäusern.<br>
             <a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-19-anhalter-huette-hanauer-huette">Etappenseite</a><br>
-            <a href="https:csat9369.github.io">Matthias von Stackelberg Github-Seite</a>
+            <a href="https://github.com/csat9369/csat9369.github.io.git">Matthias von Stackelberg Github-Repository</a>
         </p>
 </div>
 <div id="map"></div>
@@ -88,29 +103,19 @@
         metric: true,
         imperial: false
     }).addTo(map);
-    // WMTS-Layer Auswahl hinzufügen
-    var layerControl = L.control.layers({
-        "basemap.at - STANDARD": layers.geolandbasemap,
-        "basemap.at - GRAU": layers.bmapgrau,
-        "basemap.at - OVERLAY": layers.bmapoverlay,
-        "basemap.at - HIGH-DPI": layers.bmaphidpi,
-        "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
-        "OpenStreetMap": layers.osm,
-    }).addTo(map);
-    // leaflet-hash aktivieren
-    var hash = new L.Hash(map);
-    var adlerweg19 = omnivore.gpx('data/AdlerwegEtappe19.gpx').addTo(map);
-
+	
     // Höhenprofil 
     var profileControl = L.control.elevation({
         position: 'bottomleft',
         theme: 'steelblue-theme'
     });
     profileControl.addTo(map);
-
+	
 
     // GPX Track laden
     gpxTrack = omnivore.gpx('data/AdlerwegEtappe19.gpx').addTo(map);
+	
+
 
     // nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
     gpxTrack.on('ready', function() {
@@ -128,45 +133,71 @@
         markup += '<li>Einkehrmöglichkeiten: Anhalter Hütte,Haunauer Hütte</li>';
         markup += '<li><a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-19-anhalter-huette-hanauer-huette">Direkt zur Webseite</a></li>';
         gpxTrack.bindPopup(markup, {
-            maxWidth: 500
+            maxWidth: 450
         });
+	
+	
+     // Ausschnitt 
+     map.fitBounds(gpxTrack.getBounds());
 
-        // Ausschnitt 
-        map.fitBounds(gpxTrack.getBounds());
-
-        // Höhenprofil 
-        gpxTrack.eachLayer(function(layer) {
-            profileControl.addData(layer.feature);
+	
+     // Höhenprofil 
+     gpxTrack.eachLayer(function(layer) {
+     profileControl.addData(layer.feature);
         });
     });
 
-    
-    var restaurant1 = L.marker([47.249890, 10.590991], {
-        title: 'Hanauer Hütte',
-        icon: L.icon({
-            iconUrl: 'icons/cabin.png',
-        })
-    }).addTo(map);
-
-    var restaurant2 = L.marker([47.301389, 10.667774], {
-        title: 'Anhalter Hütte',
-        icon: L.icon({
-            iconUrl: 'icons/cabin.png',
-        })
-    }).addTo(map);
-
-var pointA = new L.LatLng(47.249890, 10.590991);
-var pointB = new L.LatLng(47.301389, 10.667774);
-var pointList = [pointA, pointB];
-
-var firstpolyline = new L.Polyline(pointList, {
-    color: 'red',
-    weight: 3,
-    opacity: 6,
-    smoothFactor: 1
-});
-firstpolyline.addTo(map);
 	
+	
+	
+
+    // WMTS-Layer Auswahl hinzufügen
+    var layerControl = L.control.layers({
+        "basemap.at - STANDARD": layers.geolandbasemap,
+        "basemap.at - GRAU": layers.bmapgrau,
+        "basemap.at - OVERLAY": layers.bmapoverlay,
+        "basemap.at - HIGH-DPI": layers.bmaphidpi,
+        "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
+        "OpenStreetMap": layers.osm,
+    }).addTo(map);
+   
+   // leaflet-hash aktivieren
+    var hash = new L.Hash(map);
+    var adlerweg19 = omnivore.gpx('data/AdlerwegEtappe19.gpx').addTo(map);
+
+		var cabin = [
+		L.marker([47.249890, 10.590991], {title: "Hanauer Hütte", icon: L.icon({ iconUrl:'icons/cabin.png', iconAnchor: [12, 25]}) }),
+		L.marker([47.301389, 10.667774], {title: "Anhalter Hütte", icon: L.icon({ iconUrl:'icons/cabin.png', iconAnchor: [12, 25]}) }),
+		];
+
+
+		var cabinlayer = L.featureGroup();
+		for (var i=0; i<cabin.length; i++) {
+			cabinlayer.addLayer(cabin[i]);
+		}
+		cabinlayer.addTo(map);
+		
+		
+		map.on("zoomend", function() {
+		if (map.getZoom() >= 15 ) {
+			map.addLayer(cabinlayer);
+		}
+		else {
+		map.removeLayer(cabinlayer);
+		}});
+
+		
+		// Marker für Start und Ziel hinzufügen und zur besseren sichtbarkeit den Anchor versetzen 
+       
+		L.marker([47.301389, 10.667774], {title: "start", icon: L.icon({ iconUrl:'icons/start.png', iconAnchor: [12, 30]},) })
+        .addTo(map);
+        
+      
+		L.marker([47.249890, 10.590991], {title: "Ziel", icon: L.icon({ iconUrl:'icons/ziel.png', iconAnchor: [12,30]}) })
+        .addTo(map);
+    
+     
+
 	
 	
 	
@@ -178,3 +209,10 @@ firstpolyline.addTo(map);
 </body>
 
 </html> 
+
+
+
+
+    
+
+	
